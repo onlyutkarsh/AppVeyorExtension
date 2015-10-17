@@ -4,7 +4,7 @@
 
 > [**Download**](https://visualstudiogallery.msdn.microsoft.com/54fd33fb-cd0e-4b1e-b113-a5ebb17fff20) from VS Gallery
 > 
-![](_screenshots/appveyor_toolwindow_full_annotate.jpg)
+![](_Screenshots/appveyor_toolwindow_full_annotate.jpg)
 
 ## Note ##
 
