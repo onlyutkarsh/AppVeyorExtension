@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppVeyor.Package", "AppVeyor.Package\AppVeyor.Package.csproj", "{26B8C337-1C8B-49BC-A936-72FA2FDFC380}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppVeyor.UI", "AppVeyor.UI\AppVeyor.UI.csproj", "{A46A3D53-9E7E-4AED-A7CF-C7DDABA83FEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppVeyor.Api", "AppVeyor.Api\AppVeyor.Api.csproj", "{1E4AC15D-7590-4A7D-9C1B-8B0CCE9582FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppVeyor.Api.Tests", "AppVeyor.Api.Tests\AppVeyor.Api.Tests.csproj", "{4F809422-2D0C-4751-A91E-64B68AB9039D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppVeyor.Common", "AppVeyor.Common\AppVeyor.Common.csproj", "{262035FB-98EC-4E05-ADEF-3A4104962E36}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://geeks.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = AppVeyor.Package\\AppVeyor.Package.csproj
+		SccProjectName1 = AppVeyor.Package
+		SccLocalPath1 = AppVeyor.Package
+		SccProjectUniqueName2 = AppVeyor.UI\\AppVeyor.UI.csproj
+		SccProjectName2 = AppVeyor.UI
+		SccLocalPath2 = AppVeyor.UI
+		SccProjectUniqueName3 = AppVeyor.Api\\AppVeyor.Api.csproj
+		SccProjectName3 = AppVeyor.Api
+		SccLocalPath3 = AppVeyor.Api
+		SccProjectUniqueName4 = AppVeyor.Api.Tests\\AppVeyor.Api.Tests.csproj
+		SccProjectName4 = AppVeyor.Api.Tests
+		SccLocalPath4 = AppVeyor.Api.Tests
+		SccProjectUniqueName5 = AppVeyor.Common\\AppVeyor.Common.csproj
+		SccProjectName5 = AppVeyor.Common
+		SccLocalPath5 = AppVeyor.Common
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26B8C337-1C8B-49BC-A936-72FA2FDFC380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26B8C337-1C8B-49BC-A936-72FA2FDFC380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26B8C337-1C8B-49BC-A936-72FA2FDFC380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26B8C337-1C8B-49BC-A936-72FA2FDFC380}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A46A3D53-9E7E-4AED-A7CF-C7DDABA83FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A46A3D53-9E7E-4AED-A7CF-C7DDABA83FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A46A3D53-9E7E-4AED-A7CF-C7DDABA83FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A46A3D53-9E7E-4AED-A7CF-C7DDABA83FEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E4AC15D-7590-4A7D-9C1B-8B0CCE9582FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E4AC15D-7590-4A7D-9C1B-8B0CCE9582FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E4AC15D-7590-4A7D-9C1B-8B0CCE9582FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E4AC15D-7590-4A7D-9C1B-8B0CCE9582FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F809422-2D0C-4751-A91E-64B68AB9039D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F809422-2D0C-4751-A91E-64B68AB9039D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F809422-2D0C-4751-A91E-64B68AB9039D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F809422-2D0C-4751-A91E-64B68AB9039D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{262035FB-98EC-4E05-ADEF-3A4104962E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{262035FB-98EC-4E05-ADEF-3A4104962E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{262035FB-98EC-4E05-ADEF-3A4104962E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{262035FB-98EC-4E05-ADEF-3A4104962E36}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsshlids.h"/>
+
+	<Commands package="guidAppVeyor_PackagePkg">
+		<Groups>
+			<Group guid="guidShowAppVeyorWindow" id="appVeyorMenuGroup" priority="0x000">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_VIEW"/>
+			</Group>
+			<Group guid="guidAppVeyor_PackageCmdSet" id="AppVeyorToolbarGroup" priority="0x0000">
+				<Parent guid="guidAppVeyor_PackageCmdSet" id="AppVeyorToolbar" />
+			</Group>
+		</Groups>
+		<Menus>
+			<Menu guid="guidAppVeyor_PackageCmdSet" id="AppVeyorToolbar" type="ToolWindowToolbar">
+				<CommandFlag>DefaultDocked</CommandFlag>
+				<Strings>
+					<ButtonText>Test Toolbar</ButtonText>
+					<CommandName>Test Toolbar</CommandName>
+				</Strings>
+			</Menu>
+		</Menus>
+		<Buttons>
+			<Button guid="guidShowAppVeyorWindow" id="cmdidShowAppVeyorWindow" priority="0x0100" type="Button">
+				<Parent guid="guidShowAppVeyorWindow" id="appVeyorMenuGroup"/>
+				<Icon guid="guidImages" id="appVeyorIcon" />
+				<Strings>
+					<ButtonText>AppVeyor</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidShowProjectsTab" id="cmdidShowProjectsTab" priority="0x0100" type="Button">
+				<Parent guid="guidAppVeyor_PackageCmdSet" id="AppVeyorToolbarGroup" />
+				<Icon guid="guidImages" id="projectsIcon" />
+				<!--<CommandFlag>IconAndText</CommandFlag>-->
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<CommandName>cmdidShowProjectsTab</CommandName>
+					<ButtonText>Projects</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidShowOptions" id="cmdidShowOptions" priority="0x0400" type="Button">
+				<Parent guid="guidAppVeyor_PackageCmdSet" id="AppVeyorToolbarGroup" />
+				<Icon guid="guidImages" id="optionsIcon" />
+				<Strings>
+					<CommandName>cmdidShowOptions</CommandName>
+					<ButtonText>Options</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidShowRefresh" id="cmdidShowRefresh" priority="0x0500" type="Button">
+				<Parent guid="guidAppVeyor_PackageCmdSet" id="AppVeyorToolbarGroup" />
+				<Icon guid="guidImages" id="refreshIcon" />
+				<Strings>
+					<CommandName>cmdidShowRefresh</CommandName>
+					<ButtonText>Refresh</ButtonText>
+					<ToolTipText>Force Refresh12356</ToolTipText>
+				</Strings>
+			</Button>
+		</Buttons>
+		<Bitmaps>
+			<Bitmap guid="guidImages" href="Resources\AppVeyorToolbar.png" usedList="projectsIcon, environmentsIcon, usersIcon, appVeyorIcon, optionsIcon, refreshIcon"/>
+		</Bitmaps>
+	</Commands>
+
+	<Symbols>
+		<GuidSymbol name="guidAppVeyor_PackagePkg" value="{a709c9b4-8b21-492f-aaa1-ed045db35043}" />
+
+		<GuidSymbol name="guidAppVeyor_PackageCmdSet" value="{6cb5e405-3793-4a69-8acd-95c5f5f25df0}">
+			<IDSymbol name="AppVeyorToolbar" value="0x1000" />
+			<IDSymbol name="AppVeyorToolbarGroup" value="0x1050" />
+			<IDSymbol name="cmdidMyDropDownCombo" value="0x1100" />
+			<IDSymbol name="cmdidMyDropDownComboGetList" value="0x1101" />
+		</GuidSymbol>
+		<GuidSymbol name="guidShowAppVeyorWindow" value="{6F6A1551-07CB-488C-835E-9C8A594E4C31}">
+			<IDSymbol name="cmdidShowAppVeyorWindow" value="0x0100" />
+			<IDSymbol name="appVeyorMenuGroup" value="0x1020" />
+		</GuidSymbol>
+		<GuidSymbol name="guidShowProjectsTab" value="{8A9536DF-EC50-45FF-82DD-3C489480B27B}">
+			<IDSymbol name="cmdidShowProjectsTab" value="0x1060" />
+		</GuidSymbol>
+		<GuidSymbol name="guidShowUsersTab" value="{5DC028A9-C7CF-494E-8D8B-C3729C4ED9AB}">
+			<IDSymbol name="cmdidShowUsersTab" value="0x1070" />
+		</GuidSymbol>
+		<GuidSymbol name="guidShowEnvironmentsTab" value="{855BE23B-63F4-4212-8B6F-70AFE1B309DC}">
+			<IDSymbol name="cmdidShowEnvironmentsTab" value="0x1080" />
+		</GuidSymbol>
+		<GuidSymbol name="guidShowOptions" value="{EFF56F04-9785-4B17-ACEE-00F8B8915308}">
+			<IDSymbol name="cmdidShowOptions" value="0x1090" />
+		</GuidSymbol>
+		<GuidSymbol name="guidShowRefresh" value="{6F3C0D89-2A18-48E3-9A55-041CB7EF7899}">
+			<IDSymbol name="cmdidShowRefresh" value="0x1100" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidImages" value="{e2abc2ed-f84b-4ce5-97b0-d393ba728b27}" >
+			<IDSymbol name="projectsIcon" value="1" />
+			<IDSymbol name="environmentsIcon" value="2" />
+			<IDSymbol name="usersIcon" value="3" />
+			<IDSymbol name="appVeyorIcon" value="4" />
+			<IDSymbol name="optionsIcon" value="5" />
+			<IDSymbol name="refreshIcon" value="6" />
+		</GuidSymbol>
+	</Symbols>
+
+</CommandTable>

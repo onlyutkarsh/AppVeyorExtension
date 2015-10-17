@@ -1,0 +1,744 @@
+﻿<UserControl x:Class="AppVeyor.UI.ToolWindows.AppVeyorWindowContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vsfx="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.12.0"
+             xmlns:converters="clr-namespace:AppVeyor.UI.Converters"
+             xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.12.0"
+             xmlns:common="clr-namespace:AppVeyor.UI.Common"
+             xmlns:closableTab="clr-namespace:AppVeyor.UI.Controls.ClosableTab"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             Background="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}"
+             Name="AppVeyorToolWindow">
+    <UserControl.Resources>
+        <Style x:Key="{x:Type ContextMenu}"
+               TargetType="{x:Type ContextMenu}">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="SnapsToDevicePixels"
+                    Value="True" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border Background="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}"
+                                CornerRadius="2, 2, 3, 3"
+                                BorderBrush="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}"
+                                BorderThickness="1"
+                                Opacity="1">
+                            <StackPanel ClipToBounds="True"
+                                        Orientation="Vertical"
+                                        IsItemsHost="True"
+                                        Margin="2" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}"
+                         TargetType="{x:Type MenuItem}">
+            <Border Name="Border">
+                <Grid>
+                    <ContentPresenter Margin="6,3,6,3"
+                                      ContentSource="Header"
+                                      RecognizesAccessKey="True" />
+                </Grid>
+            </Border>
+        </ControlTemplate>
+        <!-- Region Styles -->
+        <Style x:Key="HyperLinkBlueUnderlineStyle"
+               TargetType="{x:Type Hyperlink}">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.GrayTextKey}}" />
+            <Setter Property="TextDecorations"
+                    Value="None" />
+            <Setter Property="IsEnabled"
+                    Value="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type FrameworkElement}}}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Foreground"
+                            Value="{DynamicResource {x:Static vsfx:VsBrushes.ControlLinkTextKey}}" />
+                    <!--<Setter Property="TextDecorations"
+                            Value="Underline" />-->
+                </Trigger>
+                <Trigger Property="IsEnabled"
+                         Value="True">
+                    <Setter Property="Cursor"
+                            Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="HyperLinkWhiteUnderlineStyle"
+               TargetType="{x:Type Hyperlink}">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.ButtonTextKey}}" />
+            <Setter Property="TextDecorations"
+                    Value="None" />
+            <Setter Property="IsEnabled"
+                    Value="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type FrameworkElement}}}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Foreground"
+                            Value="{DynamicResource {x:Static vsfx:VsBrushes.ControlLinkTextKey}}" />
+                    <!--<Setter Property="TextDecorations"
+                            Value="Underline" />-->
+                </Trigger>
+                <Trigger Property="IsEnabled"
+                         Value="True">
+                    <Setter Property="Cursor"
+                            Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="{x:Static ToolBar.ButtonStyleKey}"
+               TargetType="{x:Type Button}">
+            <Setter Property="Padding"
+                    Value="2" />
+            <Setter Property="BorderThickness"
+                    Value="4" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="Bd"
+                                SnapsToDevicePixels="true"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter   x:Name="contentPresenter"
+                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="true">
+                                <Setter Property="BorderBrush"
+                                        TargetName="Bd"
+                                        Value="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}" />
+                                <Setter Property="TextElement.Foreground"
+                                        TargetName="contentPresenter"
+                                        Value="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}">
+
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="ProjectTemplate">
+            <Grid  Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Width="5"
+                        Margin="0,2,0,0"
+                        Background="{Binding Converter={converters:ProjectBuildStatusToColorConverter}}"
+                        ToolTip="{Binding Converter={converters:BuildStatusToTooltipConverter}}" />
+                <StackPanel Orientation="Vertical"
+                            Grid.Column="1"
+                            Margin="5,0,5,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="400"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Margin="0,2,2,0">
+                            <Hyperlink Style="{Binding Source={StaticResource HyperLinkWhiteUnderlineStyle}}"
+                                       Command="{Binding DataContext.ProjectNameClickedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}}"
+                                       CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding Name}"
+                                               Grid.Column="0"
+                                               FontWeight="Bold" />
+                            </Hyperlink>
+                        </TextBlock>
+                        <Border  Grid.Column="1"
+                                 Visibility="{Binding Converter={converters:ProjectBuildStatusToVisibilityConverter}}"
+                                 Padding="5, 2,5, 2"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 CornerRadius="3"
+                                 Background="{Binding Converter={converters:ProjectBuildStatusToColorConverter}}">
+                            <TextBlock Text="{Binding Converter={converters:ProjectBuildStatusToTextConverter}}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontSize="8.5"
+                                       FontWeight="Bold"
+                                       SnapsToDevicePixels="True">
+                            <!--<TextBlock.Background>
+                                <SolidColorBrush Color="{Binding Converter={converters:ProjectBuildStatusToColorConverter}}"
+                                                 x:Name="myrect"></SolidColorBrush>
+                            </TextBlock.Background>-->
+                            <!--<TextBlock.Triggers>
+                                <EventTrigger RoutedEvent="Label.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             From="0.5"
+                                                             To="1"
+                                                             Duration="0:0:1.5"
+                                                             BeginTime="0:0:0"
+                                                             AutoReverse="True"
+                                                             RepeatBehavior="Forever" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </TextBlock.Triggers>-->
+                            </TextBlock>
+                        </Border>
+
+                        <UniformGrid Grid.Column="2"
+                                     Columns="5">
+                            <Button Width="26"
+                                    x:Name="btnRunBuild"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                    BorderThickness="0.5"
+                                    ToolTip="Start new build"
+                                    Margin="0,2,2,0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="&#xE102;"
+                                    FontFamily="Segoe UI Symbol"
+                                    Command="{Binding DataContext.OnStartBuildCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}}"
+                                    CommandParameter="{Binding}">
+                                <Button.Foreground>
+                                    <MultiBinding Converter="{converters:ButtonForegroundColorConverter}"
+                                                  ConverterParameter="START_BUILD">
+                                        <Binding Path="."></Binding>
+                                        <Binding RelativeSource="{RelativeSource Self}"></Binding>
+                                    </MultiBinding>
+                                </Button.Foreground>
+                            </Button>
+                            <Button Width="26"
+                                    x:Name="btnCancelBuild"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                    BorderThickness="0.5"
+                                    ToolTip="Cancel the build"
+                                    Margin="0,2,2,0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="&#xE15B;"
+                                    FontFamily="Segoe UI Symbol"
+                                    Command="{Binding DataContext.OnCancelBuildCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}}"
+                                    CommandParameter="{Binding}">
+                                <Button.Foreground>
+                                    <MultiBinding Converter="{converters:ButtonForegroundColorConverter}"
+                                                  ConverterParameter="CANCEL_BUILD">
+                                        <Binding Path="."></Binding>
+                                        <Binding RelativeSource="{RelativeSource Self}"></Binding>
+                                    </MultiBinding>
+                                </Button.Foreground>
+                            </Button>
+                            <!--<Button Width="26"
+                                    Height="21"
+                                    x:Name="btnCopyYML"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                    Foreground="{DynamicResource {x:Static vsfx:VsBrushes.ButtonTextKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                    BorderThickness="0.5"
+                                    ToolTip="Copy YAML"
+                                    Margin="1,2,2,1"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="YML" FontWeight="Bold"
+                                    FontSize="8.2">
+                            </Button>-->
+                            <Button Width="26"
+                                    x:Name="btnViewHistory"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                    Foreground="{DynamicResource {x:Static vsfx:VsBrushes.ButtonTextKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                    BorderThickness="0.5"
+                                    ToolTip="Project build history"
+                                    Margin="0,2,2,0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="&#xE2AD;"
+                                    FontFamily="Segoe UI Symbol"
+                                    Command="{Binding DataContext.OnViewHistoryCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}}"
+                                    CommandParameter="{Binding}">
+                            </Button>
+                            <Button Width="26"
+                                    x:Name="btnDeployments"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                    Foreground="{DynamicResource {x:Static vsfx:VsBrushes.ButtonTextKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                    BorderThickness="0.5"
+                                    ToolTip="Deployments"
+                                    Margin="0,2,2,0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="&#xE197;"
+                                    FontFamily="Segoe UI Symbol"
+                                    Command="{Binding DataContext.OnDeploymentsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}}"
+                                    CommandParameter="{Binding}">
+                            </Button>
+                            <Button Width="26"
+                                    x:Name="btnSettings"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                    Foreground="{DynamicResource {x:Static vsfx:VsBrushes.ButtonTextKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                    BorderThickness="0.5"
+                                    ToolTip="Edit project settings"
+                                    Margin="0,2,2,0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="&#xE115;"
+                                    FontFamily="Segoe UI Symbol"
+                                    Command="{Binding DataContext.OnSettingsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}}"
+                                    CommandParameter="{Binding}">
+                            </Button>
+                            <!--<common:DropDownButton Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                                                   Foreground="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}"
+                                                   BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                                   BorderThickness="0.5"
+                                                   Width="26"
+                                                   ToolTip="More"
+                                                   Margin="0,2,2,0"
+                                                   HorizontalContentAlignment="Center"
+                                                   VerticalContentAlignment="Center"
+                                                   Content="&#xE10C;"
+                                                   FontFamily="Segoe UI Symbol">
+                                -->
+                            <!--<Image Source="../Resources/more.png"
+                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                       SnapsToDevicePixels="True"></Image>-->
+                            <!--
+                                <common:DropDownButton.DropDown>
+                                    <ContextMenu>
+                                        <MenuItem Header="View History"></MenuItem>
+                                        <MenuItem Header="Copy YAML"></MenuItem>
+                                        <Separator />
+                                        <MenuItem Header="View Deployments"></MenuItem>
+                                        <MenuItem Header="View Nuget Feed"></MenuItem>
+                                        <Separator />
+                                        <MenuItem Header="Edit Projecy Settings"></MenuItem>
+                                    </ContextMenu>
+                                </common:DropDownButton.DropDown>
+                            </common:DropDownButton>-->
+                        </UniformGrid>
+
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="400"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0">
+                                <Hyperlink Style="{Binding Source={StaticResource HyperLinkBlueUnderlineStyle}}"
+                                           Command="{Binding DataContext.ProjectBuildMessageClickedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}}"
+                                           CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding Converter={converters:ProjectToBuildMessageConverter}}"></TextBlock>
+                                </Hyperlink>
+                        </TextBlock>
+                        <TextBlock Grid.Column="2"
+                                   Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
+                                <Hyperlink Style="{Binding Source={StaticResource HyperLinkBlueUnderlineStyle}}"
+                                           Command="{Binding DataContext.ProjectBuildVersionClickedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}}"
+                                           CommandParameter="{Binding}">
+                                    <TextBlock HorizontalAlignment="Right"
+                                               Text="{Binding Converter={converters:ProjectToBuildVersionConverter}}"></TextBlock>
+                                </Hyperlink>
+                        </TextBlock>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="400"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                   Margin="0,0,5,0">
+                            <TextBlock Text="{Binding Converter={converters:ProjectToCommittedDateConverter}, StringFormat='{}{0} by'}"></TextBlock>
+                             <Hyperlink Style="{Binding Source={StaticResource HyperLinkBlueUnderlineStyle}}"
+                                        Command="{Binding DataContext.ProjectCommittedByClickedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}}"
+                                        CommandParameter="{Binding}">
+                                            <TextBlock Text="{Binding Converter={converters:ProjectToCommittedByConverter}}" />
+                                        </Hyperlink>
+                        </TextBlock>
+
+                        <TextBlock Grid.Column="1"
+                                   Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                   Margin="0,0,5,0">
+                            <Image Source="../Resources/branch-2x.png"
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   SnapsToDevicePixels="True"
+                                   Width="10"
+                                   Height="12"></Image>
+                                            <TextBlock Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                                       Text="{Binding Converter={converters:ProjectToBranchConverter}}"
+                                                       Margin="2,0,20,0"></TextBlock>
+                            <Image Source="../Resources/commit-2x.png"
+                                   SnapsToDevicePixels="True"
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   Width="10"
+                                   Height="12"></Image> 
+                            <Hyperlink Style="{Binding Source={StaticResource HyperLinkBlueUnderlineStyle}}"
+                                       Command="{Binding DataContext.ProjectCommitIdClickedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}}"
+                                       CommandParameter="{Binding}">
+                                            <TextBlock Text="{Binding Converter={converters:ProjectToCommitNumberConverter}}" />
+                                        </Hyperlink>
+                        </TextBlock>
+                        <TextBlock Grid.Column="2"
+                                   Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                                   Text="{Binding Converter={converters:ProjectToLastRunConverter}, StringFormat= {}{0}}"></TextBlock>
+
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <Style x:Key="ListBoxItemContainerStyle"
+               TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Control.Background"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}" />
+            <Setter Property="Control.Foreground"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}" />
+            <Setter Property="Control.BorderBrush"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.ActiveBorderKey}}" />
+            <Setter Property="Control.BorderThickness"
+                    Value="0,0,0,0.5" />
+            <Setter Property="Control.HorizontalContentAlignment"
+                    Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="Control.VerticalContentAlignment"
+                    Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="Control.Padding"
+                    Value="0" />
+            <Setter Property="FrameworkElement.Margin"
+                    Value="0" />
+        </Style>
+
+        <Style x:Key="NoHighlightingListBoxItemContainerStyle"
+               TargetType="ListBoxItem">
+            <Setter Property="Background"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.ActiveBorderKey}}" />
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,0.5" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="Padding"
+                    Value="0" />
+            <Setter Property="Margin"
+                    Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Grid Background="{TemplateBinding Background}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="SelectionStates">
+                                    <VisualState x:Name="Unselected" />
+                                    <VisualState x:Name="Selected" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused" />
+                                    <VisualState x:Name="Unfocused" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Rectangle x:Name="fillColor"
+                                       Fill="#FFBADDE9"
+                                       IsHitTestVisible="False"
+                                       Opacity="0"
+                                       RadiusY="1"
+                                       RadiusX="1" />
+                            <Rectangle x:Name="fillColor2"
+                                       Fill="#FFBADDE9"
+                                       IsHitTestVisible="False"
+                                       Opacity="0"
+                                       RadiusY="1"
+                                       RadiusX="1" />
+                            <Border BorderBrush="{DynamicResource {x:Static vsfx:VsBrushes.InactiveBorderKey}}"
+                                    BorderThickness="0,0,0,0.9">
+                                <ContentPresenter x:Name="contentPresenter"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Content="{TemplateBinding Content}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <Rectangle x:Name="FocusVisualElement"
+                                       RadiusY="1"
+                                       RadiusX="1"
+                                       Stroke="#FF6DBDD1"
+                                       StrokeThickness="1"
+                                       Visibility="Collapsed" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TabItemStyle"
+               TargetType="TabItem">
+            <Setter Property="Control.Background"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}" />
+            <Setter Property="Control.Foreground"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Grid Background="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}">
+                            <Border Name="Border"
+                                    BorderThickness="1,1,1,0"
+                                    BorderBrush="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}"
+                                    CornerRadius="1,1,0,0"
+                                    Margin="2,0">
+                            </Border>
+                            <!-- Mouseover -->
+                            <Border x:Name="MouseOverVisual"
+                                    Opacity="0"
+                                    Margin="1 0"
+                                    SnapsToDevicePixels="True">
+                                <Border Background="Transparent"
+                                        SnapsToDevicePixels="True" />
+                            </Border>
+                            <!-- Selected -->
+                            <Border x:Name="SelectedVisual"
+                                    Opacity="0"
+                                    Margin="1 0"
+                                    SnapsToDevicePixels="True">
+                                <Border Background="Transparent"
+                                        SnapsToDevicePixels="True" />
+                            </Border>
+                            <ContentPresenter x:Name="TabContentSite"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              ContentSource="Header"
+                                              Margin="10,5" />
+                            <!-- Focus -->
+                            <Border x:Name="FocusVisual"
+                                    Opacity="0"
+                                    Margin="1 0"
+                                    SnapsToDevicePixels="True" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected"
+                                     Value="True">
+                                <!-- We want the selected TabItem to always be on top. -->
+                                <Setter Property="Panel.ZIndex"
+                                        Value="100" />
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}" />
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}" />
+                                <Setter TargetName="Border"
+                                        Property="BorderThickness"
+                                        Value="1,1,1,0" />
+                                <Setter Property="Foreground"
+                                        Value="White" />
+                            </Trigger>
+
+                            <Trigger Property="IsSelected"
+                                     Value="False">
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}" />
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ClosedTabItemStyle"
+               TargetType="closableTab:ClosableTab">
+            <Setter Property="Control.Background"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}" />
+            <Setter Property="Control.Foreground"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="closableTab:ClosableTab">
+                        <Border Name="Border"
+                                BorderThickness="1,1,1,0"
+                                BorderBrush="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}"
+                                CornerRadius="1,1,0,0"
+                                Margin="2,0">
+                            <ContentPresenter x:Name="TabContentSite"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              ContentSource="Header"
+                                              Margin="10,2" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected"
+                                     Value="True">
+                                <!-- We want the selected TabItem to always be on top. -->
+                                <Setter Property="Panel.ZIndex"
+                                        Value="100" />
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}" />
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}" />
+                                <Setter TargetName="Border"
+                                        Property="BorderThickness"
+                                        Value="1,1,1,0" />
+                                <Setter Property="Foreground"
+                                        Value="White" />
+                            </Trigger>
+
+                            <Trigger Property="IsSelected"
+                                     Value="False">
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}" />
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Styles -->
+        <Style TargetType="{x:Type ProgressBar}">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}" />
+            <Setter Property="Background"
+                    Value="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <ProgressBar Height="2"
+                     Margin="0"
+                     IsIndeterminate="True"
+                     Visibility="{Binding IsLoading}"
+                     VerticalAlignment="Top">
+        </ProgressBar>
+
+        <TabControl x:Name="tabControl"
+                    IsEnabled="True"
+                    Background="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}"
+                    BorderBrush="{DynamicResource {x:Static vsfx:VsBrushes.FileTabSelectedBackgroundKey}}"
+                    BorderThickness="0,1,0,0">
+            <TabControl.Resources>
+                <common:DataContextSpy x:Key="TabControlDataContext"></common:DataContextSpy>
+            </TabControl.Resources>
+            <TabItem x:Name="TabItemProjects"
+                     Header="Projects"
+                     IsSelected="{Binding IsTabProjectsSelected, Mode=TwoWay}"
+                     Style="{StaticResource TabItemStyle}">
+                <Grid>
+                    <TextBlock Text="{Binding Message}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               TextAlignment="Justify"
+                               Foreground="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}"
+                               Visibility="{Binding ShowMessage, Converter={converters:BoolToVisibilityConverter}}">
+                    </TextBlock>
+                    <ListBox ItemsSource="{Binding Projects}"
+                             Visibility="{Binding ShowMessage, Converter={converters:BoolToVisibilityConverter}, ConverterParameter=Reverse}"
+                             HorizontalContentAlignment="Stretch"
+                             ItemTemplate="{StaticResource ProjectTemplate}"
+                             ItemContainerStyle="{StaticResource NoHighlightingListBoxItemContainerStyle}"
+                             Background="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}"
+                             Foreground="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}"
+                             BorderThickness="0" />
+                </Grid>
+            </TabItem>
+            <closableTab:ClosableTab x:Name="TeamsAndUsersTabItem"
+                                     Title="Users"
+                                     Visibility="{Binding IsTabUsersVisible, Mode=TwoWay, Converter={converters:BoolToVisibilityConverter}}"
+                                     IsSelected="{Binding IsTabUsersSelected, Mode=TwoWay}"
+                                     Style="{StaticResource ClosedTabItemStyle}"></closableTab:ClosableTab>
+            <closableTab:ClosableTab x:Name="TabItemEnvironment"
+                                     Title="Environments"
+                                     Visibility="{Binding IsTabEnvironmentsVisible, Mode=TwoWay, Converter={converters:BoolToVisibilityConverter}}"
+                                     IsSelected="{Binding IsTabEnvironmentsSelected, Mode=TwoWay}"
+                                     Style="{StaticResource ClosedTabItemStyle}"></closableTab:ClosableTab>
+            <TabItem x:Name="TabErrors"
+                     Header="{Binding Errors.Count, Converter={converters:MessagesHeaderConverter}}"
+                     Style="{StaticResource TabItemStyle}">
+                <Grid>
+                    <TextBlock Text="Hurrah! No errors :-)"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}"
+                               Visibility="{Binding Errors, Converter={converters:ErrorsToVisibilityConverter}}" />
+                    <ListBox ItemsSource="{Binding Errors}"
+                             Visibility="{Binding Errors, Converter={converters:ErrorsToVisibilityConverter}, ConverterParameter=reverse}"
+                             x:Name="ErrorListBox"
+                             HorizontalContentAlignment="Stretch"
+                             ItemContainerStyle="{StaticResource NoHighlightingListBoxItemContainerStyle}"
+                             Background="{DynamicResource {x:Static vsfx:VsBrushes.ToolWindowBackgroundKey}}"
+                             Foreground="{DynamicResource {x:Static vsfx:VsBrushes.CommandBarTextActiveKey}}"
+                             BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition MaxWidth="130" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Margin="1,0,15,0"
+                                               Text="{Binding Path=TimeStamp, StringFormat={}{0:dd/MM/yyyy HH:mm:ss}}"></TextBlock>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Path=Text}"
+                                               x:Name="MessgaeTextBlock"
+                                               TextWrapping="Wrap">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Copy"
+                                                          Command="{Binding Source={StaticResource TabControlDataContext}, Path=DataContext.CopyMessagesCommand}"
+                                                          CommandParameter="{Binding}" />
+                                                <Separator />
+                                                <MenuItem Header="Clear"
+                                                          Command="{Binding Source={StaticResource TabControlDataContext}, Path=DataContext.ClearMessagesCommand}" />
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
