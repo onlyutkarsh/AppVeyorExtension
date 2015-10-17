@@ -13,5 +13,5 @@
 
 
 ## Defects/ Issues? ##
-Please [raise a issue]() and we will try our best to address and fix the issue.
+Please [raise a issue](https://github.com/onlyutkarsh/AppVeyorExtension/issues/new) and we will try our best to address and fix the issue.
 Alternatively you can **contribute** the fix send the pull request :-)
