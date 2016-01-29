@@ -15,3 +15,7 @@
 ## Defects/ Issues? ##
 Please [raise a issue](https://github.com/onlyutkarsh/AppVeyorExtension/issues/new) and we will try our best to address and fix the issue.
 Alternatively you can **contribute** the fix send the pull request :-)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/onlyutkarsh/appveyorextension/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
