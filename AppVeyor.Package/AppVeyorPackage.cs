@@ -14,7 +14,7 @@ using Constants = AppVeyor.UI.Common.Constants;
 namespace AppVeyor
 {
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "1.1", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(AppVeyorWindow))]
     [Guid(GuidList.guidAppVeyor_PackagePkgString)]

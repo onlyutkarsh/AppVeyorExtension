@@ -19,7 +19,7 @@ namespace AppVeyor.Common
             _telemetryClient.Context.User.AccountId = string.Format("{0}\\{1}", Environment.UserDomainName, Environment.UserName);
             _telemetryClient.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
             _telemetryClient.Context.Device.Language = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
-            _telemetryClient.Context.Properties["AppVeyor Extension Version"] = "1.0";
+            _telemetryClient.Context.Properties["AppVeyor Extension Version"] = "1.1";
 
             TelemetryConfiguration.Active.DisableTelemetry = true;
         }
