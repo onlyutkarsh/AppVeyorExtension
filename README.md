@@ -2,7 +2,7 @@
 
 [AppVeyor](http://www.appveyor.com/) is a well known cloud build server, which integrates with many source controls like VSO (Visual Studio Online), GitHub, BitBucket etc. Like many others do, we love Appveyor. However, most of the time we spend our time in Visual Studio and interacting with Appveyor was not possible from within Visual Studio. So we decided to build an extension!
 
-> [**Download**](https://visualstudiogallery.msdn.microsoft.com/54fd33fb-cd0e-4b1e-b113-a5ebb17fff20) from VS Gallery
+> [**Download**](https://marketplace.visualstudio.com/items?itemName=UtkarshShigihalliandTarunArora.AppVeyorExtensionforVisualStudio) from VS Marketplace.
 > 
 ![](_Screenshots/appveyor_toolwindow_full_annotate.jpg)
 
